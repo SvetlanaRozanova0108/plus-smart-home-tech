@@ -1,12 +1,12 @@
-package ru.yandex.practicum.collector.schemas.manageEvent;
+package ru.yandex.practicum.collector.schemas.hubEvent;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.ToString;
+import ru.yandex.practicum.collector.enums.HubEventType;
 
 import java.time.Instant;
 
@@ -14,7 +14,7 @@ import java.time.Instant;
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
         property = "type",
-        defaultImpl = AddRemovedEventType.class
+        defaultImpl = HubEventType.class
 )
 
 @JsonSubTypes({
@@ -25,14 +25,13 @@ import java.time.Instant;
 })
 
 @Getter
-@Setter
 @ToString
-public abstract class BaseManageEvent {
+public abstract class BaseHubEvent {
 
     @NotBlank
     private String hubId;
-    private Instant timestamp = Instant.now();
+    private final Instant timestamp = Instant.now();
 
-    @NonNull
-    public abstract AddRemovedEventType getType();
+    @NotNull
+    public abstract HubEventType getType();
 }

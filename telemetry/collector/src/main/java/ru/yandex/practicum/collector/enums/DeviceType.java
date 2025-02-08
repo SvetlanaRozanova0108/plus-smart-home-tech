@@ -1,4 +1,4 @@
-package ru.yandex.practicum.collector.schemas.manageEvent;
+package ru.yandex.practicum.collector.enums;
 
 public enum DeviceType {
 

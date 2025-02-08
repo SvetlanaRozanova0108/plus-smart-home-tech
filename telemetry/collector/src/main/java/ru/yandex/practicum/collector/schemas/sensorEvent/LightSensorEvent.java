@@ -1,13 +1,15 @@
 package ru.yandex.practicum.collector.schemas.sensorEvent;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import ru.yandex.practicum.collector.enums.SensorEventType;
 
 @Getter
-@Setter
-@ToString(callSuper = true)
-public class LightBaseSensorEvent extends BaseSensorEvent {
+public class LightSensorEvent extends BaseSensorEvent {
 
+    @NotNull
     private int linkQuality;
+    @NotNull
     private int luminosity;
 
     @Override
