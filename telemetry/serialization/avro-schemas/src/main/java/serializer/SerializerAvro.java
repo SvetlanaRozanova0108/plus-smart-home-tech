@@ -9,6 +9,7 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.io.ByteArrayOutputStream;
 
+@SuppressWarnings("unused")
 public class SerializerAvro implements Serializer<SpecificRecordBase> {
 
     @Override
@@ -31,7 +32,7 @@ public class SerializerAvro implements Serializer<SpecificRecordBase> {
             return outputStream.toByteArray();
 
         } catch (Exception e) {
-            throw new SerializationException("Ошибка сериализации экземпляра.");
+            throw new SerializationException("Ошибка сериализации экземпляра по topic:" + topic);
         }
     }
 }
