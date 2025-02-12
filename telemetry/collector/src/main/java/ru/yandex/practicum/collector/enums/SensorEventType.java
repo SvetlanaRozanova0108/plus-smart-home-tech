@@ -1,4 +1,4 @@
-package ru.yandex.practicum.collector.schemas.sensorEvent;
+package ru.yandex.practicum.collector.enums;
 
 public enum SensorEventType {
 
