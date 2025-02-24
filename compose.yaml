@@ -3,7 +3,7 @@ services:
     build: telemetry/collector
     container_name: collector
     ports:
-      - "8080:8080"
+      - "59091:59091"
 
   kafka:
     image: confluentinc/confluent-local:7.4.3
