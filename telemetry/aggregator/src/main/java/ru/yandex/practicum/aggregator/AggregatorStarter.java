@@ -12,6 +12,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
+import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
 import java.time.Duration;
 import java.util.List;
@@ -22,8 +23,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AggregatorStarter {
     private final Consumer<String, SpecificRecordBase> consumer;
-    private final SensorEventHandler eventHandler;
     private final Producer<String, SpecificRecordBase> producer;
+    private final SensorEventHandler sensorEventHandler;
     @Value("${aggregator.topic.telemetry-snapshots}")
     private String snapshotsTopic;
     @Value("${topic.telemetry-sensors}")
@@ -39,10 +40,10 @@ public class AggregatorStarter {
                 ConsumerRecords<String, SpecificRecordBase> records = consumer.poll(Duration.ofMillis(1000));
 
                 for (ConsumerRecord<String, SpecificRecordBase> record : records) {
-                    log.info("Обработка сообщения {}", record.value());
+                    log.info("Обработка полученных данных {}", record.value());
                     SensorEventAvro event = (SensorEventAvro) record.value();
-                    Optional<SensorsSnapshotAvro> snapshot = eventHandler.updateState(event);
-                    log.info("Получен снимок состояния {}", snapshot);
+                    Optional<SensorsSnapshotAvro> snapshot = sensorEventHandler.updateState(event);
+                    log.info("Получение снимка состояния {}", snapshot);
                     if (snapshot.isPresent()) {
                         log.info("Запись снимка в топик Kafka");
                         ProducerRecord<String, SpecificRecordBase> message = new ProducerRecord<>(snapshotsTopic,

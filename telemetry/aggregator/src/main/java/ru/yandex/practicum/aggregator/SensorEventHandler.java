@@ -18,7 +18,7 @@ public class SensorEventHandler {
         String hubId = event.getHubId();
 
         if (!snapshots.containsKey(hubId)) {
-            SensorsSnapshotAvro snapshot = createNewSnapshot(event);
+            SensorsSnapshotAvro snapshot = createSnapshot(event);
 
             snapshots.put(hubId, snapshot);
 
@@ -31,7 +31,7 @@ public class SensorEventHandler {
         }
     }
 
-    private SensorsSnapshotAvro createNewSnapshot(SensorEventAvro event) {
+    private SensorsSnapshotAvro createSnapshot(SensorEventAvro event) {
         Map<String, SensorStateAvro> sensorStates = new HashMap<>();
 
         SensorStateAvro sensorState = createSensorState(event);
