@@ -89,21 +89,7 @@
 //        Thread.sleep(Duration.ofSeconds(seconds));
 //    }
 //
-//    private static Properties getConsumerProperties() {
-//        Properties properties = new Properties();
-//        // Общие настройки
-//        properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "SomeConsumer");
-//        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "some.group.id");
-//        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-//        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, VoidDeserializer.class.getCanonicalName());
-//        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getCanonicalName());
-//
-//        // Настройки, выбранные по условиям задачи
-//        properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 100);
-//        properties.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 3072000);
-//        properties.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 307200);
-//        return properties;
-//    }
+
 //
 //    private static int getRandomNumber(int min, int max) {
 //        return (int) ((Math.random() * (max - min)) + min);
