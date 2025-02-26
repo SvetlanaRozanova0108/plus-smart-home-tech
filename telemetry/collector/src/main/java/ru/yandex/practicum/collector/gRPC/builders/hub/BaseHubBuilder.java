@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
+
 import java.time.Instant;
 
 @Slf4j
@@ -28,7 +30,7 @@ public abstract class BaseHubBuilder implements HubEventBuilder {
         return Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos());
     }
 
-    public abstract SpecificRecordBase toAvro(HubEventProto hubEvent);
+    public abstract HubEventAvro toAvro(HubEventProto hubEvent);
 
     public abstract HubEventProto.PayloadCase getMessageType();
 }

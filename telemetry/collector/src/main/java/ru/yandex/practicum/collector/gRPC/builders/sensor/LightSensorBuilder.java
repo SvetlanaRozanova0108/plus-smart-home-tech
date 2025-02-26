@@ -15,7 +15,7 @@ public class LightSensorBuilder extends BaseSensorBuilder {
     }
 
     @Override
-    public SpecificRecordBase toAvro(SensorEventProto sensorEvent) {
+    public SensorEventAvro toAvro(SensorEventProto sensorEvent) {
         LightSensorProto lightSensor = sensorEvent.getLightSensorEvent();
 
         return SensorEventAvro.newBuilder()

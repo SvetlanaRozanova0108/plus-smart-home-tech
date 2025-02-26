@@ -15,7 +15,7 @@ public class MotionSensorBuilder extends BaseSensorBuilder {
     }
 
     @Override
-    public SpecificRecordBase toAvro(SensorEventProto sensorEvent) {
+    public SensorEventAvro toAvro(SensorEventProto sensorEvent) {
         MotionSensorProto motionSensor = sensorEvent.getMotionSensorEvent();
 
         return SensorEventAvro.newBuilder()

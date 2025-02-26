@@ -6,6 +6,8 @@ import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.beans.factory.annotation.Value;
 import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
+import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
+
 import java.time.Instant;
 
 @Slf4j
@@ -27,7 +29,7 @@ public abstract class BaseSensorBuilder implements SensorEventBuilder {
         return Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos());
     }
 
-    public abstract SpecificRecordBase toAvro(SensorEventProto sensorEvent);
+    public abstract SensorEventAvro toAvro(SensorEventProto sensorEvent);
 
     public abstract SensorEventProto.PayloadCase getMessageType();
 }

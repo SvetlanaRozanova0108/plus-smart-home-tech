@@ -15,7 +15,7 @@ public class DeviceRemovedBuilder extends BaseHubBuilder {
     }
 
     @Override
-    public SpecificRecordBase toAvro(HubEventProto hubEvent) {
+    public HubEventAvro toAvro(HubEventProto hubEvent) {
         DeviceRemovedEventProto deviceRemovedEvent = hubEvent.getDeviceRemoved();
 
         return HubEventAvro.newBuilder()

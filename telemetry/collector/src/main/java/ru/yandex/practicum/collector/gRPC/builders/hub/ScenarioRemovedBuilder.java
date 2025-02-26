@@ -15,7 +15,7 @@ public class ScenarioRemovedBuilder extends BaseHubBuilder {
     }
 
     @Override
-    public SpecificRecordBase toAvro(HubEventProto hubEvent) {
+    public HubEventAvro toAvro(HubEventProto hubEvent) {
         ScenarioRemovedEventProto scenarioRemovedEvent = hubEvent.getScenarioRemoved();
 
         return HubEventAvro.newBuilder()

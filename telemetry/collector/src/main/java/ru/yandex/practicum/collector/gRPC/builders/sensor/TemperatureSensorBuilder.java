@@ -15,7 +15,7 @@ public class TemperatureSensorBuilder extends BaseSensorBuilder {
     }
 
     @Override
-    public SpecificRecordBase toAvro(SensorEventProto sensorEvent) {
+    public SensorEventAvro toAvro(SensorEventProto sensorEvent) {
         TemperatureSensorProto temperatureSensor = sensorEvent.getTemperatureSensorEvent();
 
         return SensorEventAvro.newBuilder()
