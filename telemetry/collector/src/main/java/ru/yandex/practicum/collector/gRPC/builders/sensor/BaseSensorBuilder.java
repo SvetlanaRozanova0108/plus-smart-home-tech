@@ -1,19 +1,21 @@
 package ru.yandex.practicum.collector.gRPC.builders.sensor;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.beans.factory.annotation.Value;
 import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-
 import java.time.Instant;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class BaseSensorBuilder implements SensorEventBuilder {
 
     private final KafkaProducer producer;
 
     @Value("${topic.telemetry-sensors}")
+
     private String topic;
 
     @Override

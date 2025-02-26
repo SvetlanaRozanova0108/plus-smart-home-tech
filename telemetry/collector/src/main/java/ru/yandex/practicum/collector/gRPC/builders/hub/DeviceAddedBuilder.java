@@ -42,6 +42,7 @@ public class DeviceAddedBuilder extends BaseHubBuilder {
             case CLIMATE_SENSOR -> type = DeviceTypeAvro.CLIMATE_SENSOR;
             case TEMPERATURE_SENSOR -> type = DeviceTypeAvro.TEMPERATURE_SENSOR;
         }
+
         return type;
     }
 }

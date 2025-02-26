@@ -1,4 +1,4 @@
-package ru.yandex.practicum.collector.gRPC;
+package ru.yandex.practicum.collector.gRPC.controller;
 
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;

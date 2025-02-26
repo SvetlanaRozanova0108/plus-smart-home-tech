@@ -53,13 +53,6 @@ message ScenarioConditionProto {
   }
 }
 
-//enum ActionTypeProto {
-//  DEVICE_ADDED = 0;
-//  DEVICE_REMOVED = 1;
-//  SCENARIO_ADDED = 2;
-//  SCENARIO_REMOVED = 3;
-//}
-
 enum DeviceTypeProto {
   MOTION_SENSOR = 0;
   TEMPERATURE_SENSOR = 1;
