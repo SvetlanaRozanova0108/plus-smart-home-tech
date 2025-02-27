@@ -1,13 +1,13 @@
 services:
-  collector:
-    build: telemetry/collector
-    container_name: collector
-    ports:
-      - "59091:59091"
-    networks:
-      - net
-    environment:
-      spring__kafka__producer__bootstrap-servers: kafka:9092
+#  collector:
+#    build: telemetry/collector
+#    container_name: collector
+#    ports:
+#      - "59091:59091"
+#    networks:
+#      - net
+#    environment:
+#      spring__kafka__producer__bootstrap-servers: kafka:9092
 
   kafka:
     image: confluentinc/confluent-local:7.4.3
