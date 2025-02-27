@@ -1,4 +1,4 @@
-package ru.yandex.practicum.hub_router_client;
+package ru.yandex.practicum;
 
 import com.google.protobuf.Timestamp;
 import lombok.extern.slf4j.Slf4j;
@@ -6,9 +6,9 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.config.*;
 import ru.yandex.practicum.grpc.telemetry.collector.CollectorControllerGrpc;
 import ru.yandex.practicum.grpc.telemetry.event.*;
-import ru.yandex.practicum.hub_router_client.config.*;
 
 import java.time.Instant;
 import java.util.Random;
