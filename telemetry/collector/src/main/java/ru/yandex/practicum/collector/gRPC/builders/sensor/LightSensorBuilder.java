@@ -1,8 +1,7 @@
 package ru.yandex.practicum.collector.gRPC.builders.sensor;
 
-import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
+import ru.yandex.practicum.collector.gRPC.producer.KafkaEventProducer;
 import ru.yandex.practicum.grpc.telemetry.event.LightSensorProto;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
@@ -10,7 +9,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 
 @Component
 public class LightSensorBuilder extends BaseSensorBuilder {
-    public LightSensorBuilder(KafkaProducer producer) {
+    public LightSensorBuilder(KafkaEventProducer producer) {
         super(producer);
     }
 

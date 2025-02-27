@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @Component
 @RequiredArgsConstructor
-public class KafkaProducer implements AutoCloseable {
+public class KafkaEventProducer implements AutoCloseable {
 
     private final Producer<String, SpecificRecordBase> producer;
 

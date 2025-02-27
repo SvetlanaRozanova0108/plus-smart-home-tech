@@ -1,8 +1,7 @@
 package ru.yandex.practicum.collector.gRPC.builders.hub;
 
-import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
+import ru.yandex.practicum.collector.gRPC.producer.KafkaEventProducer;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceRemovedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceRemovedEventAvro;
@@ -10,7 +9,7 @@ import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
 @Component
 public class DeviceRemovedBuilder extends BaseHubBuilder {
-    public DeviceRemovedBuilder(KafkaProducer producer) {
+    public DeviceRemovedBuilder(KafkaEventProducer producer) {
         super(producer);
     }
 

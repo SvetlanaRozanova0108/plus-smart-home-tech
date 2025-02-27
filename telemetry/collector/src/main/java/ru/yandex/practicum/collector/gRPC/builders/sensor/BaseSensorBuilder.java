@@ -2,9 +2,8 @@ package ru.yandex.practicum.collector.gRPC.builders.sensor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.beans.factory.annotation.Value;
-import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
+import ru.yandex.practicum.collector.gRPC.producer.KafkaEventProducer;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 
@@ -14,7 +13,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public abstract class BaseSensorBuilder implements SensorEventBuilder {
 
-    private final KafkaProducer producer;
+    private final KafkaEventProducer producer;
 
     @Value("${topic.telemetry-sensors}")
 
@@ -22,7 +21,9 @@ public abstract class BaseSensorBuilder implements SensorEventBuilder {
 
     @Override
     public void builder(SensorEventProto event) {
-        producer.send(toAvro(event), event.getHubId(), mapTimestampToInstant(event), topic);
+        var contract = toAvro(event);
+        log.info("Отправляем событие сенсора {}", contract);
+        producer.send(contract, event.getHubId(), mapTimestampToInstant(event), topic);
     }
 
     public Instant mapTimestampToInstant(SensorEventProto event) {
