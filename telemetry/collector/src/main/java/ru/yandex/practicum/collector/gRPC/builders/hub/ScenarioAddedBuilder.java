@@ -23,7 +23,8 @@ public class ScenarioAddedBuilder extends BaseHubBuilder {
         return HubEventAvro.newBuilder()
                 .setHubId(hubEvent.getHubId())
                 .setTimestamp(mapTimestampToInstant(hubEvent))
-                .setPayload(new ScenarioAddedEventAvro(scenarioAddedEvent.getName(), mapToConditionTypeAvro(scenarioAddedEvent.getConditionsList()),
+                .setPayload(new ScenarioAddedEventAvro(scenarioAddedEvent.getName(),
+                        mapToConditionTypeAvro(scenarioAddedEvent.getConditionsList()),
                         mapToDeviceActionAvro(scenarioAddedEvent.getActionsList())))
                 .build();
     }
