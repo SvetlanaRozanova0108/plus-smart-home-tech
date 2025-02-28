@@ -1,4 +1,4 @@
-package ru.yandex.practicum.hub_router_client.config;
+package ru.yandex.practicum.config;
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.core.env.PropertiesPropertySource;

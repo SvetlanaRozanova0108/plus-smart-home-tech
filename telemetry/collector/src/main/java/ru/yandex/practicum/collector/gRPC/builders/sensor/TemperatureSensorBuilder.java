@@ -1,8 +1,7 @@
 package ru.yandex.practicum.collector.gRPC.builders.sensor;
 
-import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
+import ru.yandex.practicum.collector.gRPC.producer.KafkaEventProducer;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.TemperatureSensorProto;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
@@ -10,12 +9,12 @@ import ru.yandex.practicum.kafka.telemetry.event.TemperatureSensorAvro;
 
 @Component
 public class TemperatureSensorBuilder extends BaseSensorBuilder {
-    public TemperatureSensorBuilder(KafkaProducer producer) {
+    public TemperatureSensorBuilder(KafkaEventProducer producer) {
         super(producer);
     }
 
     @Override
-    public SpecificRecordBase toAvro(SensorEventProto sensorEvent) {
+    public SensorEventAvro toAvro(SensorEventProto sensorEvent) {
         TemperatureSensorProto temperatureSensor = sensorEvent.getTemperatureSensorEvent();
 
         return SensorEventAvro.newBuilder()

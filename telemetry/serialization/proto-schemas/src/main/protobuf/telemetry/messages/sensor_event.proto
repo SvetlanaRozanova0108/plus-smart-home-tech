@@ -38,8 +38,8 @@ message LightSensorProto {
 
 message ClimateSensorProto {
   int32 temperature_c = 1;
-  int32 humidity = 2;
-  int32 co2_level = 3;
+  int32 humidity = 3;
+  int32 co2_level = 5;
 }
 
 message SwitchSensorProto {
@@ -50,10 +50,3 @@ message CollectorResponse {
   google.protobuf.Timestamp timestamp = 1;
 
 }
-//  enum SensorEventTypeProto {
-//    SWITCH_SENSOR_EVENT = 0;
-//    MOTION_SENSOR_EVENT = 1;
-//    LIGHT_SENSOR_EVENT = 2;
-//    CLIMATE_SENSOR_EVENT = 3;
-//    TEMPERATURE_SENSOR_EVENT = 4;
-//  }

@@ -1,8 +1,7 @@
 package ru.yandex.practicum.collector.gRPC.builders.hub;
 
-import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
+import ru.yandex.practicum.collector.gRPC.producer.KafkaEventProducer;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.ScenarioAddedEventProto;
@@ -13,18 +12,19 @@ import java.util.List;
 
 @Component
 public class ScenarioAddedBuilder extends BaseHubBuilder {
-    public ScenarioAddedBuilder(KafkaProducer producer) {
+    public ScenarioAddedBuilder(KafkaEventProducer producer) {
         super(producer);
     }
 
     @Override
-    public SpecificRecordBase toAvro(HubEventProto hubEvent) {
+    public HubEventAvro toAvro(HubEventProto hubEvent) {
         ScenarioAddedEventProto scenarioAddedEvent = hubEvent.getScenarioAdded();
 
         return HubEventAvro.newBuilder()
                 .setHubId(hubEvent.getHubId())
                 .setTimestamp(mapTimestampToInstant(hubEvent))
-                .setPayload(new ScenarioAddedEventAvro(scenarioAddedEvent.getName(), mapToConditionTypeAvro(scenarioAddedEvent.getConditionsList()),
+                .setPayload(new ScenarioAddedEventAvro(scenarioAddedEvent.getName(),
+                        mapToConditionTypeAvro(scenarioAddedEvent.getConditionsList()),
                         mapToDeviceActionAvro(scenarioAddedEvent.getActionsList())))
                 .build();
     }
