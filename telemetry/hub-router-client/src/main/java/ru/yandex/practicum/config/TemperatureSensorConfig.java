@@ -1,4 +1,4 @@
-package ru.yandex.practicum.hub_router_client.config;
+package ru.yandex.practicum.config;
 
 import lombok.Getter;
 import lombok.Setter;

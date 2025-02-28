@@ -1,8 +1,7 @@
 package ru.yandex.practicum.collector.gRPC.builders.hub;
 
-import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.collector.gRPC.producer.KafkaProducer;
+import ru.yandex.practicum.collector.gRPC.producer.KafkaEventProducer;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceAddedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceTypeProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
@@ -12,12 +11,12 @@ import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
 @Component
 public class DeviceAddedBuilder extends BaseHubBuilder {
-    public DeviceAddedBuilder(KafkaProducer producer) {
+    public DeviceAddedBuilder(KafkaEventProducer producer) {
         super(producer);
     }
 
     @Override
-    public SpecificRecordBase toAvro(HubEventProto hubEvent) {
+    public HubEventAvro toAvro(HubEventProto hubEvent) {
         DeviceAddedEventProto deviceAddedEvent = hubEvent.getDeviceAdded();
 
         return HubEventAvro.newBuilder()
@@ -42,6 +41,7 @@ public class DeviceAddedBuilder extends BaseHubBuilder {
             case CLIMATE_SENSOR -> type = DeviceTypeAvro.CLIMATE_SENSOR;
             case TEMPERATURE_SENSOR -> type = DeviceTypeAvro.TEMPERATURE_SENSOR;
         }
+
         return type;
     }
 }
