@@ -13,6 +13,7 @@ import java.util.Properties;
 @Configuration
 @RequiredArgsConstructor
 public class KafkaProducerProperties {
+
     private final Environment environment;
 
     @Bean

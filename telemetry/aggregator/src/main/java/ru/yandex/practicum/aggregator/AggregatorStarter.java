@@ -22,9 +22,11 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AggregatorStarter {
+
     private final Consumer<String, SpecificRecordBase> consumer;
     private final Producer<String, SpecificRecordBase> producer;
     private final SensorEventHandler sensorEventHandler;
+
     @Value("${aggregator.topic.telemetry-snapshots}")
     private String snapshotsTopic;
     @Value("${topic.telemetry-sensors}")
