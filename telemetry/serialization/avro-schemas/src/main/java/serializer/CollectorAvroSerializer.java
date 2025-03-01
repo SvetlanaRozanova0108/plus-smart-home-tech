@@ -9,7 +9,7 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.io.ByteArrayOutputStream;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class CollectorAvroSerializer implements Serializer<SpecificRecordBase> {
 
     @Override
