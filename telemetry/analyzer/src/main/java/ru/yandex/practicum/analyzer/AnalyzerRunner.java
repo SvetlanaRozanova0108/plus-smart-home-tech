@@ -1,13 +1,14 @@
 package ru.yandex.practicum.analyzer;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.analyzer.processors.HubEventProcessor;
 import ru.yandex.practicum.analyzer.processors.SnapshotProcessor;
 
 @Component
 @RequiredArgsConstructor
-public class AnalyzerStart {
+public class AnalyzerRunner implements CommandLineRunner {
 
     private final HubEventProcessor hubEventProcessor;
     private final SnapshotProcessor snapshotProcessor;

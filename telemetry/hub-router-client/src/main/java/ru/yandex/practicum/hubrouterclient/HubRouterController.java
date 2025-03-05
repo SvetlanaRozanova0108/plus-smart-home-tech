@@ -1,4 +1,4 @@
-package ru.practicum.hubrouter.server;
+package ru.yandex.practicum.hubrouterclient;
 
 import com.google.protobuf.Empty;
 import io.grpc.Status;
@@ -7,7 +7,7 @@ import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionRequest;
-import ru.yandex.practicum.grpc.telemetry.hubrouter.HubRouterControllerGrpc;
+import ru.yandex.practicum.grpc.telemetry.hubrouterclient.HubRouterControllerGrpc;
 
 @Slf4j
 @GrpcService

@@ -9,7 +9,6 @@ import lombok.*;
 @Table(name = "sensors")
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Sensor {
 
     @Id

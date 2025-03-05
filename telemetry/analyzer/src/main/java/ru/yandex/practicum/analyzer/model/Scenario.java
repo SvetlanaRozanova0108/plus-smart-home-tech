@@ -9,7 +9,6 @@ import lombok.*;
 @Table(name = "scenarios")
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Scenario {
 
     @Id

@@ -8,8 +8,10 @@ import ru.yandex.practicum.analyzer.model.Action;
 import ru.yandex.practicum.analyzer.model.Condition;
 import ru.yandex.practicum.analyzer.model.Scenario;
 import ru.yandex.practicum.analyzer.repository.*;
+import ru.yandex.practicum.kafka.telemetry.event.DeviceActionAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioAddedEventAvro;
+import ru.yandex.practicum.kafka.telemetry.event.ScenarioConditionAvro;
 
 import java.util.Optional;
 import java.util.Set;
@@ -95,13 +97,13 @@ public class ScenarioAdded implements HubEventBuilder {
         }
     }
 
-    private boolean checkSensorsInScenarioConditions(ScenarioAddedEventAvro scenarioAddedEvent, String hubId) {
+    private Boolean checkSensorsInScenarioConditions(ScenarioAddedEventAvro scenarioAddedEvent, String hubId) {
         return sensorRepository.existsByIdInAndHubId(scenarioAddedEvent.getConditions().stream()
                 .map(ScenarioConditionAvro::getSensorId)
                 .toList(), hubId);
     }
 
-    private boolean checkSensorsInScenarioActions(ScenarioAddedEventAvro scenarioAddedEvent, String hubId) {
+    private Boolean checkSensorsInScenarioActions(ScenarioAddedEventAvro scenarioAddedEvent, String hubId) {
         return sensorRepository.existsByIdInAndHubId(scenarioAddedEvent.getActions().stream()
                 .map(DeviceActionAvro::getSensorId)
                 .toList(), hubId);

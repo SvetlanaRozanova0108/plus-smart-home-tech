@@ -2,6 +2,8 @@ package ru.yandex.practicum.analyzer.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.yandex.practicum.kafka.telemetry.event.ConditionOperationAvro;
+import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
 
 @Getter
 @Setter
@@ -9,7 +11,6 @@ import lombok.*;
 @Table(name = "conditions")
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Condition {
 
     @Id
