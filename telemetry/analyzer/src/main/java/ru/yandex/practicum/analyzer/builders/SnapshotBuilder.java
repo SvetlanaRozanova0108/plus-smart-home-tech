@@ -14,8 +14,6 @@ import ru.yandex.practicum.kafka.telemetry.event.*;
 import java.util.List;
 import java.util.Map;
 
-import static ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro.*;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor

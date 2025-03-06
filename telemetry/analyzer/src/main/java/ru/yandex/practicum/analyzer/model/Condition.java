@@ -5,8 +5,7 @@ import lombok.*;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionOperationAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
 
-@Getter
-@Setter
+@Entity
 @Builder
 @Table(name = "conditions")
 @AllArgsConstructor

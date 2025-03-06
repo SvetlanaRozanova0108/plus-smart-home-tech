@@ -3,8 +3,7 @@ package ru.yandex.practicum.analyzer.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+@Entity
 @Builder
 @Table(name = "scenarios")
 @AllArgsConstructor
