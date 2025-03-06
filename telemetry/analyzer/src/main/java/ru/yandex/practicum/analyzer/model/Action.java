@@ -5,6 +5,7 @@ import lombok.*;
 import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 
 @Entity
+@Getter
 @Builder
 @Table(name = "actions")
 @AllArgsConstructor

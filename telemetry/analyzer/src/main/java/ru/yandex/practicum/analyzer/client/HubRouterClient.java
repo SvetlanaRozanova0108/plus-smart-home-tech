@@ -8,7 +8,7 @@ import ru.yandex.practicum.analyzer.model.Action;
 import ru.yandex.practicum.grpc.telemetry.event.ActionTypeProto;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionProto;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionRequest;
-import ru.yandex.practicum.grpc.telemetry.hubrouterclient.HubRouterControllerGrpc;
+import ru.yandex.practicum.grpc.telemetry.hubrouter.HubRouterControllerGrpc;
 import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 
 import java.time.Instant;
