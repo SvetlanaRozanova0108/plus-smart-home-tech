@@ -1,4 +1,14 @@
 services:
+  db:
+    image: postgres:16.1
+    container_name: db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=scenario-db
+
 #  collector:
 #    build: telemetry/collector
 #    container_name: collector
