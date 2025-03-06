@@ -10,6 +10,7 @@ import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 @Table(name = "actions")
 @AllArgsConstructor
 @NoArgsConstructor
+@SecondaryTable(name = "scenario_actions", pkJoinColumns = @PrimaryKeyJoinColumn(name = "action_id"))
 public class Action {
 
     @Id
