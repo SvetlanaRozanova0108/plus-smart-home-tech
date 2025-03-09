@@ -1,13 +1,9 @@
-package ru.yandex.practicum.analyzer;
+package ru.yandex.practicum.analyzer.runner;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.analyzer.processors.HubEventProcessor;
-import ru.yandex.practicum.analyzer.processors.SnapshotProcessor;
-
-import java.util.concurrent.*;
 
 @Component
 @RequiredArgsConstructor
