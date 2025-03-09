@@ -32,7 +32,7 @@ public class HubEventProcessor implements Runnable {
         try {
             consumer.subscribe(List.of(topic));
             Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
-            Map<String, HubEventHandler> mapHandler = hubHandlers.getHandlers();
+            Map<String, HubEventHandler> mapBuilder = hubHandlers.getBuilders();
 
             while (true) {
                 ConsumerRecords<String, HubEventAvro> records = consumer.poll(Duration.ofMillis(1000));
@@ -41,8 +41,8 @@ public class HubEventProcessor implements Runnable {
                     HubEventAvro event = record.value();
                     String payloadName = event.getPayload().getClass().getSimpleName();
                     log.info("Получение хаба {}", payloadName);
-                    if (mapHandler.containsKey(payloadName)) {
-                        mapHandler.get(payloadName).handle(event);
+                    if (mapBuilder.containsKey(payloadName)) {
+                        mapBuilder.get(payloadName).handle(event);
                     } else {
                         throw new IllegalArgumentException("Нет обработчика для события " + event);
                     }
