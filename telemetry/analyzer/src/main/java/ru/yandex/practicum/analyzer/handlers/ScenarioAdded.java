@@ -31,12 +31,11 @@ public class ScenarioAdded implements HubEventHandler {
     @Transactional
     public void handle(HubEventAvro hubEvent) {
         ScenarioAddedEventAvro scenarioAddedEvent = (ScenarioAddedEventAvro) hubEvent.getPayload();
-        Scenario scenarioDb = scenarioRepository.findByHubIdAndName(hubEvent.getHubId(),
-                scenarioAddedEvent.getName()).orElseGet(null);;
+        Optional<Scenario> scenarioOpt = scenarioRepository.findByHubIdAndName(hubEvent.getHubId(),
+                scenarioAddedEvent.getName());
 
-        if (scenarioDb == null) {
+        if (scenarioOpt.isEmpty()) {
             Scenario scenario = scenarioRepository.save(buildToScenario(hubEvent));
-
             if (checkSensorsInScenarioConditions(scenarioAddedEvent, hubEvent.getHubId())) {
                 conditionRepository.saveAll(buildToCondition(scenarioAddedEvent, scenario));
             }
@@ -44,12 +43,12 @@ public class ScenarioAdded implements HubEventHandler {
                 actionRepository.saveAll(buildToAction(scenarioAddedEvent, scenario));
             }
         } else {
-
+            Scenario scenario = scenarioOpt.get();
             if (checkSensorsInScenarioConditions(scenarioAddedEvent, hubEvent.getHubId())) {
-                conditionRepository.saveAll(buildToCondition(scenarioAddedEvent, scenarioDb));
+                conditionRepository.saveAll(buildToCondition(scenarioAddedEvent, scenario));
             }
             if (checkSensorsInScenarioActions(scenarioAddedEvent, hubEvent.getHubId())) {
-                actionRepository.saveAll(buildToAction(scenarioAddedEvent, scenarioDb));
+                actionRepository.saveAll(buildToAction(scenarioAddedEvent, scenario));
             }
         }
     }
