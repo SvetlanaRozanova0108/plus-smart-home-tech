@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SnapshotProcessor implements Runnable {
+public class SnapshotProcessor {
 
     private final Consumer<String, SensorsSnapshotAvro> consumer;
     private final SnapshotHandler snapshotHandler;
@@ -25,7 +25,7 @@ public class SnapshotProcessor implements Runnable {
     @Value("${topic.snapshots-topic}")
     private String topic;
 
-    public void run() {
+    public void start() {
         try {
             consumer.subscribe(List.of(topic));
             Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
