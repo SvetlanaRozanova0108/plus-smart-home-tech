@@ -1,4 +1,4 @@
-package ru.yandex.practicum.analyzer.builders;
+package ru.yandex.practicum.analyzer.handlers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ScenarioRemoved implements HubEventBuilder {
+public class ScenarioRemoved implements HubEventHandler {
 
     private final ScenarioRepository scenarioRepository;
     private final ConditionRepository conditionRepository;
@@ -22,7 +22,7 @@ public class ScenarioRemoved implements HubEventBuilder {
 
     @Override
     @Transactional
-    public void build(HubEventAvro hubEvent) {
+    public void handle(HubEventAvro hubEvent) {
         ScenarioRemovedEventAvro scenarioRemovedEvent = (ScenarioRemovedEventAvro) hubEvent.getPayload();
         Optional<Scenario> scenarioOpt = scenarioRepository.findByHubIdAndName(hubEvent.getHubId(), scenarioRemovedEvent.getName());
 

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.analyzer.builders;
+package ru.yandex.practicum.analyzer.handlers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ScenarioAdded implements HubEventBuilder {
+public class ScenarioAdded implements HubEventHandler {
 
     private final ScenarioRepository scenarioRepository;
     private final ConditionRepository conditionRepository;
@@ -29,7 +29,7 @@ public class ScenarioAdded implements HubEventBuilder {
 
     @Override
     @Transactional
-    public void build(HubEventAvro hubEvent) {
+    public void handle(HubEventAvro hubEvent) {
         ScenarioAddedEventAvro scenarioAddedEvent = (ScenarioAddedEventAvro) hubEvent.getPayload();
         Optional<Scenario> scenarioOpt = scenarioRepository.findByHubIdAndName(hubEvent.getHubId(),
                 scenarioAddedEvent.getName());

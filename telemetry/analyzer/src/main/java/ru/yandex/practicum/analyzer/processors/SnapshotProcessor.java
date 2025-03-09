@@ -8,7 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.analyzer.builders.SnapshotBuilder;
+import ru.yandex.practicum.analyzer.handlers.SnapshotHandler;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
 import java.time.Duration;
@@ -20,7 +20,7 @@ import java.util.List;
 public class SnapshotProcessor {
 
     private final Consumer<String, SensorsSnapshotAvro> consumer;
-    private final SnapshotBuilder snapshotBuilder;
+    private final SnapshotHandler snapshotHandler;
 
     @Value("${topic.snapshots-topic}")
     private String topic;
@@ -36,7 +36,7 @@ public class SnapshotProcessor {
                 for (ConsumerRecord<String, SensorsSnapshotAvro> record : records) {
                     SensorsSnapshotAvro sensorsSnapshot = record.value();
                     log.info("Получен снимок умного дома: {}", sensorsSnapshot);
-                    snapshotBuilder.buildSnapshot(sensorsSnapshot);
+                    snapshotHandler.buildSnapshot(sensorsSnapshot);
                 }
                 consumer.commitSync();
             }

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.analyzer.builders;
+package ru.yandex.practicum.analyzer.handlers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SnapshotBuilder {
+public class SnapshotHandler {
 
     private final ConditionRepository conditionRepository;
     private final ScenarioRepository scenarioRepository;
