@@ -17,21 +17,20 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SnapshotBuilderHandler {
+public class SnapshotHandler {
 
     private final ConditionRepository conditionRepository;
     private final ScenarioRepository scenarioRepository;
     private final ActionRepository actionRepository;
     private final HubRouterClient hubRouterClient;
 
-    public void buildSnapshot(SensorsSnapshotAvro sensorsSnapshot) {
+    public void handle(SensorsSnapshotAvro sensorsSnapshot) {
         Map<String, SensorStateAvro> sensorStateMap = sensorsSnapshot.getSensorsState();
+
         List<Scenario> scenarios = scenarioRepository.findByHubId(sensorsSnapshot.getHubId());
         scenarios.stream()
                 .filter(scenario -> handleScenario(scenario, sensorStateMap))
-                .forEach(scenario -> {
-                    sendScenarioActions(scenario);
-                });
+                .forEach(this::sendScenarioActions);
     }
 
     private boolean handleScenario(Scenario scenario, Map<String, SensorStateAvro> sensorStateMap) {
@@ -98,6 +97,8 @@ public class SnapshotBuilderHandler {
     }
 
     private void sendScenarioActions(Scenario scenario) {
-        actionRepository.findAllByScenario(scenario).forEach(hubRouterClient::sendAction);
+        actionRepository
+                .findAllByScenario(scenario)
+                .forEach(hubRouterClient::sendAction);
     }
 }
