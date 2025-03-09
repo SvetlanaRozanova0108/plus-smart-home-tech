@@ -1,4 +1,4 @@
-package ru.yandex.practicum.analyzer.runner;
+package ru.yandex.practicum.analyzer;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
