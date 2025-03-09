@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 @Component
 public class HubHandlers {
 
-    private final Map<String, HubEventHandler> builders;
+    private final Map<String, HubEventHandler> handlers;
 
-    public HubHandlers(Set<HubEventHandler> builders) {
-        this.builders = builders.stream()
-                .collect(Collectors.toMap(HubEventHandler::getMessageType, b -> b));
+    public HubHandlers(Set<HubEventHandler> handlers) {
+        this.handlers = handlers.stream()
+                .collect(Collectors.toMap(HubEventHandler::getMessageType, h -> h));
     }
 }
