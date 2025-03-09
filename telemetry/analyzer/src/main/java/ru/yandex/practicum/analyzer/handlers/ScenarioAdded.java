@@ -31,10 +31,9 @@ public class ScenarioAdded implements HubEventHandler {
     @Transactional
     public void handle(HubEventAvro hubEvent) {
         ScenarioAddedEventAvro scenarioAddedEvent = (ScenarioAddedEventAvro) hubEvent.getPayload();
-        Optional<Scenario> scenarioOpt = scenarioRepository.findByHubIdAndName(hubEvent.getHubId(),
-                scenarioAddedEvent.getName());
+        Scenario scenario = scenarioRepository.findByHubIdAndName(hubEvent.getHubId(),
+                scenarioAddedEvent.getName()).orElseGet(() -> scenarioRepository.save(buildToScenario(hubEvent)));
 
-        Scenario scenario = scenarioOpt.orElseGet(() -> scenarioRepository.save(buildToScenario(hubEvent)));
         if (checkSensorsInScenarioConditions(scenarioAddedEvent, hubEvent.getHubId())) {
             conditionRepository.saveAll(buildToCondition(scenarioAddedEvent, scenario));
         }
