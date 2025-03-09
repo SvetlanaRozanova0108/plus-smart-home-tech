@@ -8,8 +8,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.analyzer.handlers.HubHandlers;
-import ru.yandex.practicum.analyzer.handlers.HubEventHandler;
+import ru.yandex.practicum.analyzer.builders.HubBuilders;
+import ru.yandex.practicum.analyzer.builders.HubEventBuilder;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
 import java.time.Duration;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class HubEventProcessor implements Runnable {
 
     private final Consumer<String, HubEventAvro> consumer;
-    private final HubHandlers hubHandlers;
+    private final HubBuilders hubBuilders;
 
     @Value("${topic.hub-event-topic}")
     private String topic;
@@ -32,7 +32,7 @@ public class HubEventProcessor implements Runnable {
         try {
             consumer.subscribe(List.of(topic));
             Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
-            Map<String, HubEventHandler> mapBuilder = hubHandlers.getBuilders();
+            Map<String, HubEventBuilder> mapBuilder = hubBuilders.getBuilders();
 
             while (true) {
                 ConsumerRecords<String, HubEventAvro> records = consumer.poll(Duration.ofMillis(1000));
@@ -42,7 +42,7 @@ public class HubEventProcessor implements Runnable {
                     String payloadName = event.getPayload().getClass().getSimpleName();
                     log.info("Получение хаба {}", payloadName);
                     if (mapBuilder.containsKey(payloadName)) {
-                        mapBuilder.get(payloadName).handle(event);
+                        mapBuilder.get(payloadName).build(event);
                     } else {
                         throw new IllegalArgumentException("Нет обработчика для события " + event);
                     }
