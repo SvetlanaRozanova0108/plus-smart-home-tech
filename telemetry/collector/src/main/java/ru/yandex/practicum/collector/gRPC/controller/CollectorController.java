@@ -5,8 +5,8 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import ru.yandex.practicum.collector.gRPC.builders.hub.HubEventBuilder;
-import ru.yandex.practicum.collector.gRPC.builders.sensor.SensorEventBuilder;
+import ru.yandex.practicum.collector.gRPC.handlers.hub.HubEventHandler;
+import ru.yandex.practicum.collector.gRPC.handlers.sensor.SensorEventHandler;
 import ru.yandex.practicum.grpc.telemetry.collector.CollectorControllerGrpc;
 import ru.yandex.practicum.grpc.telemetry.event.CollectorResponse;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
@@ -21,18 +21,18 @@ import java.util.stream.Collectors;
 @GrpcService
 public class CollectorController extends CollectorControllerGrpc.CollectorControllerImplBase {
 
-    private final Map<SensorEventProto.PayloadCase, SensorEventBuilder> sensorEventBuilders;
-    private final Map<HubEventProto.PayloadCase, HubEventBuilder> hubEventBuilders;
+    private final Map<SensorEventProto.PayloadCase, SensorEventHandler> sensorEventHandlers;
+    private final Map<HubEventProto.PayloadCase, HubEventHandler> hubEventHandlers;
 
-    public CollectorController(Set<SensorEventBuilder> sensorEventBuilders, Set<HubEventBuilder> hubEventBuilders) {
-        this.sensorEventBuilders = sensorEventBuilders.stream()
+    public CollectorController(Set<SensorEventHandler> sensorEventHandlers, Set<HubEventHandler> hubEventHandlers) {
+        this.sensorEventHandlers = sensorEventHandlers.stream()
                 .collect(Collectors.toMap(
-                        SensorEventBuilder::getMessageType,
+                        SensorEventHandler::getMessageType,
                         Function.identity()
                 ));
-        this.hubEventBuilders = hubEventBuilders.stream()
+        this.hubEventHandlers = hubEventHandlers.stream()
                 .collect(Collectors.toMap(
-                        HubEventBuilder::getMessageType,
+                        HubEventHandler::getMessageType,
                         Function.identity()
                 ));
     }
@@ -40,8 +40,8 @@ public class CollectorController extends CollectorControllerGrpc.CollectorContro
     @Override
     public void collectSensorEvent(SensorEventProto request, StreamObserver<CollectorResponse> responseObserver) {
         try {
-            if (sensorEventBuilders.containsKey(request.getPayloadCase())) {
-                sensorEventBuilders.get(request.getPayloadCase()).builder(request);
+            if (sensorEventHandlers.containsKey(request.getPayloadCase())) {
+                sensorEventHandlers.get(request.getPayloadCase()).handle(request);
             } else {
                 throw new IllegalArgumentException("Не могу найти обработчик для события " + request.getPayloadCase());
             }
@@ -57,8 +57,8 @@ public class CollectorController extends CollectorControllerGrpc.CollectorContro
     @Override
     public void collectHubEvent(HubEventProto request, StreamObserver<CollectorResponse> responseObserver) {
         try {
-            if (hubEventBuilders.containsKey(request.getPayloadCase())) {
-                hubEventBuilders.get(request.getPayloadCase()).builder(request);
+            if (hubEventHandlers.containsKey(request.getPayloadCase())) {
+                hubEventHandlers.get(request.getPayloadCase()).handle(request);
             } else {
                 throw new IllegalArgumentException("Не могу найти обработчик для события " + request.getPayloadCase());
             }
