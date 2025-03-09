@@ -34,22 +34,12 @@ public class ScenarioAdded implements HubEventHandler {
         Optional<Scenario> scenarioOpt = scenarioRepository.findByHubIdAndName(hubEvent.getHubId(),
                 scenarioAddedEvent.getName());
 
-        if (scenarioOpt.isEmpty()) {
-            Scenario scenario = scenarioRepository.save(buildToScenario(hubEvent));
-            if (checkSensorsInScenarioConditions(scenarioAddedEvent, hubEvent.getHubId())) {
-                conditionRepository.saveAll(buildToCondition(scenarioAddedEvent, scenario));
-            }
-            if (checkSensorsInScenarioActions(scenarioAddedEvent, hubEvent.getHubId())) {
-                actionRepository.saveAll(buildToAction(scenarioAddedEvent, scenario));
-            }
-        } else {
-            Scenario scenario = scenarioOpt.get();
-            if (checkSensorsInScenarioConditions(scenarioAddedEvent, hubEvent.getHubId())) {
-                conditionRepository.saveAll(buildToCondition(scenarioAddedEvent, scenario));
-            }
-            if (checkSensorsInScenarioActions(scenarioAddedEvent, hubEvent.getHubId())) {
-                actionRepository.saveAll(buildToAction(scenarioAddedEvent, scenario));
-            }
+        Scenario scenario = scenarioOpt.orElseGet(() -> scenarioRepository.save(buildToScenario(hubEvent)));
+        if (checkSensorsInScenarioConditions(scenarioAddedEvent, hubEvent.getHubId())) {
+            conditionRepository.saveAll(buildToCondition(scenarioAddedEvent, scenario));
+        }
+        if (checkSensorsInScenarioActions(scenarioAddedEvent, hubEvent.getHubId())) {
+            actionRepository.saveAll(buildToAction(scenarioAddedEvent, scenario));
         }
     }
 
