@@ -1,9 +1,6 @@
-server:
-  port: 0
-
 spring:
   application:
-    name: collector
+    name: hub-router
   config:
     import: "configserver:"
   cloud:
