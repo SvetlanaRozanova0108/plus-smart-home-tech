@@ -1,6 +1,9 @@
-package ru.yandex.practicum.shoppingstore.model;
+package ru.yandex.practicum.interactionapi.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.yandex.practicum.interactionapi.enums.ProductCategory;
@@ -9,27 +12,26 @@ import ru.yandex.practicum.interactionapi.enums.QuantityState;
 
 import java.util.UUID;
 
-@Entity
-@Table(name = "products")
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class ProductDto {
     UUID productId;
+    @NotBlank
     String productName;
+    @NotBlank
     String description;
     String imageSrc;
-    @Enumerated(EnumType.STRING)
+    @NotNull
     QuantityState quantityState;
-    @Enumerated(EnumType.STRING)
+    @NotNull
     ProductState productState;
-    @Enumerated(EnumType.STRING)
+    @Min(1)
+    @Max(5)
+    Integer rating;
     ProductCategory productCategory;
-    double price;
-    int rating;
+    @NotNull
+    Double price;
 }
