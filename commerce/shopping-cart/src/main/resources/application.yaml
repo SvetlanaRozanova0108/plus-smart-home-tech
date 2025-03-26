@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: warehouse
+    name: shopping-cart
   config:
     import: "configserver:"
   cloud:
@@ -13,7 +13,7 @@ spring:
         enabled: true
         service-id: config-server
       retry:
-        useRandomPolicy: true
+        use-random-policy: true
         max-interval: 6000
 
 eureka:
