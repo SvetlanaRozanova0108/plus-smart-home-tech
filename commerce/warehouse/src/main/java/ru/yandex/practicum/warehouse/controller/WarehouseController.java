@@ -45,7 +45,7 @@ public class WarehouseController {
 
     @PostMapping("/booking")
     public BookedProductsDto bookingProducts(@RequestBody @Valid ShoppingCartDto shoppingCartDto) {
-        log.info("Бронирование корзины покупок для пользователя {}", shoppingCartDto);
+        log.info("Бронирование корзины покупок {}", shoppingCartDto);
         return warehouseService.bookingProducts(shoppingCartDto);
     }
 }

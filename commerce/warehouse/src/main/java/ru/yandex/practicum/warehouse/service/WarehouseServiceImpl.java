@@ -9,12 +9,12 @@ import ru.yandex.practicum.interactionapi.dto.AddressDto;
 import ru.yandex.practicum.interactionapi.dto.BookedProductsDto;
 import ru.yandex.practicum.interactionapi.dto.ShoppingCartDto;
 import ru.yandex.practicum.interactionapi.enums.QuantityState;
-import ru.yandex.practicum.interactionapi.feign.ShopingStoreClient;
+import ru.yandex.practicum.interactionapi.feign.ShoppingStoreClient;
 import ru.yandex.practicum.interactionapi.request.AddProductToWarehouseRequest;
 import ru.yandex.practicum.interactionapi.request.NewProductInWarehouseRequest;
 import ru.yandex.practicum.warehouse.address.Address;
 import ru.yandex.practicum.warehouse.exception.NoSpecifiedProductInWarehouseException;
-import ru.yandex.practicum.warehouse.exception.ProductInShoppingCartLowQuantityInWarehouseException;
+import ru.yandex.practicum.interactionapi.exception.ProductInShoppingCartLowQuantityInWarehouseException;
 import ru.yandex.practicum.warehouse.exception.ProductNotFoundInWarehouseException;
 import ru.yandex.practicum.warehouse.exception.SpecifiedProductAlreadyInWarehouseException;
 import ru.yandex.practicum.warehouse.mapper.BookingMapper;
@@ -35,7 +35,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
     private final WarehouseMapper warehouseMapper;
-    private final ShopingStoreClient shopingStoreClient;
+    private final ShoppingStoreClient shoppingStoreClient;
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
 
@@ -155,6 +155,6 @@ public class WarehouseServiceImpl implements WarehouseService {
         } else {
             quantityState = QuantityState.MANY;
         }
-        shopingStoreClient.setProductQuantityState(productId, quantityState);
+        shoppingStoreClient.setProductQuantityState(productId, quantityState);
     }
 }
