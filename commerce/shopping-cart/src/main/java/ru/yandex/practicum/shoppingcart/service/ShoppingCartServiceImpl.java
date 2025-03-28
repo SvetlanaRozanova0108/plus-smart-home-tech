@@ -3,7 +3,6 @@ package ru.yandex.practicum.shoppingcart.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.interactionapi.dto.BookedProductsDto;
 import ru.yandex.practicum.interactionapi.feign.WarehouseClient;
 import ru.yandex.practicum.interactionapi.request.ChangeProductQuantityRequest;
 import ru.yandex.practicum.interactionapi.dto.ShoppingCartDto;
@@ -72,13 +71,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseThrow(() -> new NoProductsInShoppingCartException("Пользователь " + username + " не имеет корзину покупок."));
         shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);
-    }
-
-    @Override
-    public BookedProductsDto bookingProducts(String username) {
-        checkUsername(username);
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUsername(username);
-        return warehouseClient.bookingProducts(shoppingCartMapper.toShoppingCartDto(shoppingCart));
     }
 
     private void checkUsername(String username) {

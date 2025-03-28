@@ -16,6 +16,7 @@ import ru.yandex.practicum.warehouse.service.WarehouseService;
 @RequestMapping("/api/v1/warehouse")
 @RequiredArgsConstructor
 public class WarehouseController {
+
     private final WarehouseService warehouseService;
 
     @PutMapping
@@ -40,5 +41,11 @@ public class WarehouseController {
     public AddressDto getAddress() {
         log.info("Получение адреса.");
         return warehouseService.getAddress();
+    }
+
+    @PostMapping("/booking")
+    public BookedProductsDto bookingProducts(@RequestBody @Valid ShoppingCartDto shoppingCartDto) {
+        log.info("Бронирование корзины покупок для пользователя {}", shoppingCartDto);
+        return warehouseService.bookingProducts(shoppingCartDto);
     }
 }
