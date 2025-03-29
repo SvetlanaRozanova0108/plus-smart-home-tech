@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   cloud:
     gateway:
@@ -5,12 +8,12 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: shopping_cart_circuitbreaker_route
+        - id: shopping_cart_service_route
           uri: lb://shopping-cart
           predicates:
             - Path=/shopping-cart/**
           filters:
-            - CircuitBreaker=myCircuitBreaker
+            - PrefixPath=/api/v1
         - id: shopping_store_service_route
           uri: lb://shopping-store
           predicates:
