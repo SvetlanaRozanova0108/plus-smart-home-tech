@@ -21,7 +21,7 @@ public class Warehouse {
     @Id
     UUID productId;
     Long quantity;
-    Boolean fragile;
+    boolean fragile;
     @Embedded
     Dimension dimension;
     double weight;

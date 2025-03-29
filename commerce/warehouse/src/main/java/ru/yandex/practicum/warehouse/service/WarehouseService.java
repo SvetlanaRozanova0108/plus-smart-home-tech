@@ -7,6 +7,7 @@ import ru.yandex.practicum.interactionapi.request.AddProductToWarehouseRequest;
 import ru.yandex.practicum.interactionapi.request.NewProductInWarehouseRequest;
 
 public interface WarehouseService {
+
     void newProductInWarehouse(NewProductInWarehouseRequest newProductInWarehouseRequest);
 
     BookedProductsDto checkProductQuantityEnoughForShoppingCart(ShoppingCartDto shoppingCartDto);
@@ -15,8 +16,5 @@ public interface WarehouseService {
 
     AddressDto getAddress();
 
-//    void returnProductToWarehouse(Map<UUID, Long> products);
-//
-//    BookedProductsDto assemblyProductForOrder(AssemblyProductForOrderFromShoppingCartDto assemblyProductDto);
-
+    BookedProductsDto bookingProducts(ShoppingCartDto shoppingCartDto);
 }

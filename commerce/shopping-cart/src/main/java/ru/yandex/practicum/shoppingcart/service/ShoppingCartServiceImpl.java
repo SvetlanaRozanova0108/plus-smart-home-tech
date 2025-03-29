@@ -75,7 +75,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public BookedProductsDto bookingProducts(String username) {
+    public BookedProductsDto bookingProductsForUser(String username) {
         checkUsername(username);
         ShoppingCart shoppingCart = shoppingCartRepository.findByUsername(username);
         return warehouseClient.bookingProducts(shoppingCartMapper.toShoppingCartDto(shoppingCart));

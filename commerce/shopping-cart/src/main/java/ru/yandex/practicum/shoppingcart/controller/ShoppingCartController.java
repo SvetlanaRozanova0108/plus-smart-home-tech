@@ -53,8 +53,8 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/booking")
-    public BookedProductsDto bookingProducts(@RequestParam String username) {
+    public BookedProductsDto bookingProductsForUser(@RequestParam String username) {
         log.info("Бронирование корзины покупок для пользователя {}", username);
-        return shoppingCartService.bookingProducts(username);
+        return shoppingCartService.bookingProductsForUser(username);
     }
 }
