@@ -9,22 +9,22 @@ import ru.yandex.practicum.interactionapi.dto.AddressDto;
 import ru.yandex.practicum.interactionapi.dto.BookedProductsDto;
 import ru.yandex.practicum.interactionapi.dto.ShoppingCartDto;
 import ru.yandex.practicum.interactionapi.enums.QuantityState;
-import ru.yandex.practicum.interactionapi.feign.ShopingStoreClient;
+import ru.yandex.practicum.interactionapi.feign.ShoppingStoreClient;
 import ru.yandex.practicum.interactionapi.request.AddProductToWarehouseRequest;
 import ru.yandex.practicum.interactionapi.request.NewProductInWarehouseRequest;
 import ru.yandex.practicum.warehouse.address.Address;
 import ru.yandex.practicum.warehouse.exception.NoSpecifiedProductInWarehouseException;
-import ru.yandex.practicum.warehouse.exception.ProductInShoppingCartLowQuantityInWarehouseException;
+import ru.yandex.practicum.interactionapi.exception.ProductInShoppingCartLowQuantityInWarehouseException;
 import ru.yandex.practicum.warehouse.exception.ProductNotFoundInWarehouseException;
 import ru.yandex.practicum.warehouse.exception.SpecifiedProductAlreadyInWarehouseException;
+import ru.yandex.practicum.warehouse.mapper.BookingMapper;
 import ru.yandex.practicum.warehouse.mapper.WarehouseMapper;
+import ru.yandex.practicum.warehouse.model.Booking;
 import ru.yandex.practicum.warehouse.model.Warehouse;
+import ru.yandex.practicum.warehouse.repository.BookingRepository;
 import ru.yandex.practicum.warehouse.repository.WarehouseRepository;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,7 +35,9 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
     private final WarehouseMapper warehouseMapper;
-    private final ShopingStoreClient shopingStoreClient;
+    private final ShoppingStoreClient shoppingStoreClient;
+    private final BookingMapper bookingMapper;
+    private final BookingRepository bookingRepository;
 
     @Override
     public void newProductInWarehouse(NewProductInWarehouseRequest newProductInWarehouseRequest) {
@@ -90,10 +92,45 @@ public class WarehouseServiceImpl implements WarehouseService {
                 .build();
     }
 
+    public BookedProductsDto bookingProducts(ShoppingCartDto shoppingCartDto) {
+        Map<UUID, Long> products = shoppingCartDto.getProducts();
+        List<Warehouse> productsInWarehouse = warehouseRepository.findAllById(products.keySet());
+        productsInWarehouse.forEach(warehouse -> {
+            if (warehouse.getQuantity() < products.get(warehouse.getProductId())) {
+                throw new ProductInShoppingCartLowQuantityInWarehouseException(
+                        "Товар " + warehouse.getProductId() + " is sold out");
+            }
+        });
+
+        double deliveryVolume = productsInWarehouse.stream()
+                .map(v -> v.getDimension().getDepth() * v.getDimension().getWidth()
+                        * v.getDimension().getHeight())
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+        double deliveryWeight = productsInWarehouse.stream()
+                .map(Warehouse::getWeight)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+        boolean fragile = productsInWarehouse.stream()
+                .anyMatch(Warehouse::isFragile);
+
+        Booking newBooking = Booking.builder()
+                .shoppingCartId(shoppingCartDto.getShoppingCartId())
+                .deliveryVolume(deliveryVolume)
+                .deliveryWeight(deliveryWeight)
+                .fragile(fragile)
+                .products(products)
+                .build();
+        Booking booking = bookingRepository.save(newBooking);
+        return bookingMapper.toBookedProductsDto(booking);
+    }
+
     private BookedProductsDto getBookedProducts(Collection<Warehouse> productList,
                                                 Map<UUID, Long> cartProducts) {
         return BookedProductsDto.builder()
-                .fragile(productList.stream().anyMatch(Warehouse::getFragile))
+                .fragile(productList.stream().anyMatch(Warehouse::isFragile))
                 .deliveryWeight(productList.stream()
                         .mapToDouble(p -> p.getWeight() * cartProducts.get(p.getProductId()))
                         .sum())
@@ -118,6 +155,6 @@ public class WarehouseServiceImpl implements WarehouseService {
         } else {
             quantityState = QuantityState.MANY;
         }
-        shopingStoreClient.setProductQuantityState(productId, quantityState);
+        shoppingStoreClient.setProductQuantityState(productId, quantityState);
     }
 }

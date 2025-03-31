@@ -8,5 +8,5 @@ create table if not exists products
     price            double precision,
     quantity_state   varchar not null,
     product_state    varchar not null,
-    product_category varchar not null,
+    product_category varchar not null
 );
