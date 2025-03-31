@@ -8,19 +8,18 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: shopping_cart_service_route
+        - id: shopping_cart_circuitbreaker_route
           uri: lb://shopping-cart
           predicates:
             - Path=/shopping-cart/**
           filters:
-            - PrefixPath=/api/v1
+            - CircuitBreaker=myCircuitBreaker
         - id: shopping_store_service_route
           uri: lb://shopping-store
           predicates:
             - Path=/shopping-store/**
           filters:
             - PrefixPath=/api/v1
-            - Retry=3,NOT_FOUND,GET,10ms,50ms,2,false
         - id: warehouse_service_route
           uri: lb://warehouse
           predicates:

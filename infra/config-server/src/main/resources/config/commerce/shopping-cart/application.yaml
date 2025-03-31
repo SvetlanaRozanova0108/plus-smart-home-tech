@@ -8,12 +8,6 @@ spring:
     show_sql: true
   cloud:
     openfeign:
-      client:
-        config:
-          default:
-            connectTimeout: 5000
-            readTimeout: 5000
-            loggerLevel: basic
       circuitbreaker:
         enabled: true
         alphanumeric-ids:
@@ -29,18 +23,17 @@ spring:
     username: cart
     password: cart
 
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      slidingWindowSize: 50
-      failureRateThreshold: 50
-  instances:
-    warehouse:
-      waitDurationInOpenState: 10000
-      permittedNumberOfCallsInHalfOpenState: 3
-      slidingWindowType: COUNT_BASED
-      minimumNumberOfCalls: 5
-      automaticTransitionFromOpenToHalfOpenEnabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      warehouse:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
 
 management:
   endpoints:
