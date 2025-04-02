@@ -10,10 +10,10 @@ import ru.yandex.practicum.interactionapi.enums.QuantityState;
 import java.util.UUID;
 
 @Entity
-@Table(name = "products")
 @Getter
 @Setter
 @Builder
+@Table(name = "products")
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
