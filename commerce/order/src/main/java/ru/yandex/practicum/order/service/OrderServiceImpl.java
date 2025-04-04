@@ -40,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
     private final PaymentClient paymentClient;
     private final DeliveryClient deliveryClient;
 
+    private final String MESSAGE_ORDER_NOT_FOUND = "Заказ не найден.";
+
     @Override
     @Transactional(readOnly = true)
     public List<OrderDto> getClientOrders(String username, Integer page, Integer size) {
@@ -87,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto productReturn(ProductReturnRequest returnRequest) {
         Order order = orderRepository.findById(returnRequest.getOrderId())
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         warehouseClient.acceptReturn(returnRequest.getProducts());
         order.setState(OrderState.PRODUCT_RETURNED);
         return orderMapper.toOrderDto(order);
@@ -96,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto payment(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setState(OrderState.PAID);
         return orderMapper.toOrderDto(order);
     }
@@ -104,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto paymentFailed(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setState(OrderState.PAYMENT_FAILED);
         return orderMapper.toOrderDto(order);
     }
@@ -112,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto delivery(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setState(OrderState.DELIVERED);
         return orderMapper.toOrderDto(order);
     }
@@ -120,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto deliveryFailed(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setState(OrderState.DELIVERY_FAILED);
         return orderMapper.toOrderDto(order);
     }
@@ -128,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto complete(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setState(OrderState.COMPLETED);
         return orderMapper.toOrderDto(order);
     }
@@ -136,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto calculateTotalCost(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setTotalPrice(paymentClient.getTotalCost(orderMapper.toOrderDto(order)));
         return orderMapper.toOrderDto(order);
     }
@@ -144,7 +146,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto calculateDeliveryCost(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setDeliveryPrice(deliveryClient.deliveryCost(orderMapper.toOrderDto(order)));
         return orderMapper.toOrderDto(order);
     }
@@ -152,7 +154,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto assembly(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setState(OrderState.ASSEMBLED);
         return orderMapper.toOrderDto(order);
     }
@@ -160,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto assemblyFailed(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoOrderFoundException("Заказ не найден."));
+                .orElseThrow(() -> new NoOrderFoundException(MESSAGE_ORDER_NOT_FOUND));
         order.setState(OrderState.ASSEMBLY_FAILED);
         return orderMapper.toOrderDto(order);
     }

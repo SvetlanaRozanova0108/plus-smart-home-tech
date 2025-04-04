@@ -28,6 +28,9 @@ public class PaymentServiceImpl implements PaymentService {
     private final ShoppingStoreClient shoppingStoreClient;
     private final OrderClient orderClient;
 
+    private final String MESSAGE_NOT_INFORMATION = "Недостаточно информации в заказе для расчёта.";
+    private final String MESSAGE_PAYMENT_NOT_FOUND = "Указанная оплата не найдена.";
+
     @Override
     public PaymentDto createPayment(OrderDto orderDto) {
         checkOrder(orderDto);
@@ -46,7 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional(readOnly = true)
     public Double getTotalCost(OrderDto orderDto) {
         if (orderDto.getDeliveryPrice() == null) {
-            throw new NotEnoughInfoInOrderToCalculateException("Недостаточно информации в заказе для расчёта.");
+            throw new NotEnoughInfoInOrderToCalculateException(MESSAGE_NOT_INFORMATION);
         }
         return orderDto.getProductPrice() + getTax(orderDto.getProductPrice()) + orderDto.getDeliveryPrice();
     }
@@ -54,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void paymentSuccess(UUID uuid) {
         Payment payment = paymentRepository.findById(uuid).orElseThrow(
-                () -> new NoPaymentFoundException("Указанная оплата не найдена."));
+                () -> new NoPaymentFoundException(MESSAGE_PAYMENT_NOT_FOUND));
         payment.setStatus(PaymentState.SUCCESS);
         orderClient.payment(payment.getOrderId());
     }
@@ -65,7 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
         double productCost = 0.0;
         Map<UUID, Long> products = orderDto.getProducts();
         if (products == null) {
-            throw new NotEnoughInfoInOrderToCalculateException("Недостаточно информации в заказе для расчёта.");
+            throw new NotEnoughInfoInOrderToCalculateException(MESSAGE_NOT_INFORMATION);
         }
         for (Map.Entry<UUID, Long> entry : products.entrySet()) {
             ProductDto product = shoppingStoreClient.getProduct(entry.getKey());
@@ -77,18 +80,20 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void paymentFailed(UUID uuid) {
         Payment payment = paymentRepository.findById(uuid).orElseThrow(
-                () -> new NoPaymentFoundException("Указанная оплата не найдена."));
+                () -> new NoPaymentFoundException(MESSAGE_PAYMENT_NOT_FOUND));
         payment.setStatus(PaymentState.FAILED);
         orderClient.paymentFailed(payment.getOrderId());
     }
 
     private void checkOrder(OrderDto orderDto) {
         if (orderDto.getDeliveryPrice() == null) {
-            throw new NotEnoughInfoInOrderToCalculateException("Недостаточно информации в заказе для расчёта.");
-        } else if (orderDto.getProductPrice() == null) {
-            throw new NotEnoughInfoInOrderToCalculateException("Недостаточно информации в заказе для расчёта.");
-        } else if (orderDto.getTotalPrice() == null) {
-            throw new NotEnoughInfoInOrderToCalculateException("Недостаточно информации в заказе для расчёта.");
+            throw new NotEnoughInfoInOrderToCalculateException(MESSAGE_NOT_INFORMATION);
+        }
+        if (orderDto.getProductPrice() == null) {
+            throw new NotEnoughInfoInOrderToCalculateException(MESSAGE_NOT_INFORMATION);
+        }
+        if (orderDto.getTotalPrice() == null) {
+            throw new NotEnoughInfoInOrderToCalculateException(MESSAGE_NOT_INFORMATION);
         }
     }
 

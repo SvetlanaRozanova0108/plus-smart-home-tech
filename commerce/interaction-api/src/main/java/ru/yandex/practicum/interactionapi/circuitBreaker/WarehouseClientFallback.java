@@ -16,43 +16,45 @@ import java.util.UUID;
 @Component
 public class WarehouseClientFallback implements WarehouseClient {
 
+    private static final String MESSAGE_FALLBACK = "Fallback response: сервис временно недоступен.";
+
     @Override
     public void newProductInWarehouse(NewProductInWarehouseRequest requestDto) {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 
     @Override
     public void shippedToDelivery(ShippedToDeliveryRequest deliveryRequest) {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 
     @Override
     public void acceptReturn(Map<UUID, Long> products) {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 
     @Override
     public BookedProductsDto checkProductQuantityEnoughForShoppingCart(ShoppingCartDto shoppingCartDto) {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 
     @Override
     public BookedProductsDto assemblyProductForOrder(AssemblyProductsForOrderRequest assemblyProductsForOrder) {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 
     @Override
     public void addProductToWarehouse(AddProductToWarehouseRequest requestDto) {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 
     @Override
     public AddressDto getWarehouseAddress() {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 
     @Override
     public BookedProductsDto bookingProducts(ShoppingCartDto shoppingCartDto) {
-        throw new WarehouseServerUnavailable("Fallback response: сервис временно недоступен.");
+        throw new WarehouseServerUnavailable(MESSAGE_FALLBACK);
     }
 }

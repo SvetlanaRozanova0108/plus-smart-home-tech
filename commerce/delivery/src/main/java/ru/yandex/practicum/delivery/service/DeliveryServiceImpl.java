@@ -27,6 +27,10 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final OrderClient orderClient;
     private final WarehouseClient warehouseClient;
 
+    private static final double BASERATE = 5.0;
+    private static final String ADDRESS1 = "ADDRESS_1";
+    private static final String ADDRESS2 = "ADDRESS_2";
+
     @Override
     public DeliveryDto planDelivery(DeliveryDto deliveryDto) {
         Delivery delivery = deliveryMapper.toDelivery(deliveryDto);
@@ -64,17 +68,17 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public Double deliveryCost(OrderDto orderDto) {
-        final double baseRate = 5.0;
         Delivery delivery = deliveryRepository.findByOrderId(orderDto.getOrderId()).orElseThrow(
                 () -> new NoDeliveryFoundException("Не найдена доставка для расчёта"));
 
         AddressDto warehouseAddress = warehouseClient.getWarehouseAddress();
+
         double addressCost = switch (warehouseAddress.getCity()) {
-            case "ADDRESS_1" -> baseRate * 1;
-            case "ADDRESS_2" -> baseRate * 2;
+            case ADDRESS1 -> BASERATE * 1;
+            case ADDRESS2 -> BASERATE * 2;
             default -> throw new IllegalStateException(String.format("Unexpected value: %s", warehouseAddress.getCity()));
         };
-        double deliveryCost = baseRate + addressCost;
+        double deliveryCost = BASERATE + addressCost;
         if (orderDto.getFragile()) deliveryCost += deliveryCost * 0.2;
         deliveryCost += orderDto.getDeliveryWeight() * 0.3;
         deliveryCost += orderDto.getDeliveryVolume() * 0.2;
