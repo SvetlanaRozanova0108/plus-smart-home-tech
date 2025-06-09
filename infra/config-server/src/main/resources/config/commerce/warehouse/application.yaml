@@ -16,3 +16,10 @@ spring:
     url: jdbc:postgresql://localhost:8432/warehouse-db
     username: warehouse
     password: warehouse
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: info
+            JpaTransactionManager: info
