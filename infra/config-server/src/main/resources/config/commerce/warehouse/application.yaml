@@ -18,8 +18,5 @@ spring:
     password: warehouse
 logging:
   level:
-    org:
-      springframework:
-        orm:
-          jpa: info
-            JpaTransactionManager: info
+    org.springframework.orm.jpa: info
+    org.springframework.orm.jpa.JpaTransactionManager: info

@@ -32,8 +32,11 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
 
     @Transactional(readOnly = true)
     public List<ProductDto> getProducts(ProductCategory productCategory, PageableDto pageableDto) {
-        Pageable pageRequest = PageRequest.of(pageableDto.getPage(), pageableDto.getSize(),
-                Sort.by(Sort.DEFAULT_DIRECTION, String.join(",", pageableDto.getSort())));
+        List<String> sortProperties = pageableDto.getSort();
+        Sort sort = CollectionUtils.isEmpty(sortProperties)
+                ? Sort.unsorted()
+                : Sort.by(Sort.DEFAULT_DIRECTION, sortProperties.toArray(String[]::new));
+        Pageable pageRequest = PageRequest.of(pageableDto.getPage(), pageableDto.getSize(), sort);
         List<Product> products = shoppingStoreRepository.findAllByProductCategory(productCategory, pageRequest);
         if (CollectionUtils.isEmpty(products)) {
             return Collections.emptyList();

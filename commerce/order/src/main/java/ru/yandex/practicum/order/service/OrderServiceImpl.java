@@ -11,6 +11,7 @@ import ru.yandex.practicum.interactionapi.dto.BookedProductsDto;
 import ru.yandex.practicum.interactionapi.dto.DeliveryDto;
 import ru.yandex.practicum.interactionapi.dto.OrderDto;
 import ru.yandex.practicum.interactionapi.dto.ShoppingCartDto;
+import ru.yandex.practicum.interactionapi.enums.DeliveryState;
 import ru.yandex.practicum.interactionapi.enums.OrderState;
 import ru.yandex.practicum.interactionapi.exception.NotAuthorizedUserException;
 import ru.yandex.practicum.interactionapi.feign.DeliveryClient;
@@ -76,13 +77,19 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setProductPrice(paymentClient.productCost(orderMapper.toOrderDto(newOrder)));
 
         DeliveryDto deliveryDto = DeliveryDto.builder()
+                .deliveryId(UUID.randomUUID())
                 .orderId(newOrder.getOrderId())
                 .fromAddress(warehouseClient.getWarehouseAddress())
                 .toAddress(newOrderRequest.getDeliveryAddress())
+                .deliveryState(DeliveryState.CREATED)
                 .build();
         newOrder.setDeliveryId(deliveryClient.planDelivery(deliveryDto).getDeliveryId());
 
-        paymentClient.createPayment(orderMapper.toOrderDto(newOrder));
+        newOrder.setDeliveryPrice(deliveryClient.deliveryCost(orderMapper.toOrderDto(newOrder)));
+        newOrder.setTotalPrice(newOrder.getProductPrice() * 1.1 + newOrder.getDeliveryPrice());
+        newOrder.setState(OrderState.ON_PAYMENT);
+
+        newOrder.setPaymentId(paymentClient.createPayment(orderMapper.toOrderDto(newOrder)).getPaymentId());
         return orderMapper.toOrderDto(newOrder);
     }
 

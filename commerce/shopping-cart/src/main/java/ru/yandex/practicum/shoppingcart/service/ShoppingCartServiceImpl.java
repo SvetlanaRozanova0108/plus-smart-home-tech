@@ -30,17 +30,30 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto getShoppingCart(String username) {
         checkUsername(username);
         ShoppingCart shoppingCart = shoppingCartRepository.findByUsername(username);
+        if (shoppingCart == null) {
+            return ShoppingCartDto.builder()
+                    .products(new java.util.HashMap<>())
+                    .build();
+        }
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
     @Override
     public ShoppingCartDto addProductToShoppingCart(String username, Map<UUID, Long> request) {
         checkUsername(username);
-        ShoppingCart shoppingCart = ShoppingCart.builder()
-                .username(username)
-                .products(request)
-                .active(true)
-                .build();
+        ShoppingCart foundCart = shoppingCartRepository.findByUsername(username);
+        ShoppingCart shoppingCart = foundCart != null
+                ? foundCart
+                : ShoppingCart.builder()
+                        .username(username)
+                        .products(new java.util.HashMap<>())
+                        .active(true)
+                        .build();
+        if (shoppingCart.getProducts() == null) {
+            shoppingCart.setProducts(new java.util.HashMap<>());
+        }
+        request.forEach((productId, quantity) ->
+                shoppingCart.getProducts().merge(productId, quantity, Long::sum));
         return shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.save(shoppingCart));
     }
 
@@ -58,19 +71,22 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (shoppingCart == null) {
             throw new NoProductsInShoppingCartException("Пользователь " + username + " не имеет корзину покупок.");
         }
-        shoppingCart.setProducts(request);
-        return shoppingCartMapper.toShoppingCartDto(shoppingCart);
+        if (shoppingCart.getProducts() == null) {
+            shoppingCart.setProducts(new java.util.HashMap<>());
+        }
+        request.keySet().forEach(shoppingCart.getProducts()::remove);
+        return shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.save(shoppingCart));
     }
 
     @Override
     public ShoppingCartDto changeProductQuantity(String username, ChangeProductQuantityRequest requestDto) {
         checkUsername(username);
         ShoppingCart shoppingCart = shoppingCartRepository.findByUsername(username);
-        shoppingCart.getProducts().entrySet().stream()
-                .filter(entry -> entry.getKey().equals(requestDto.getProductId()))
-                .peek(entry -> entry.setValue(requestDto.getNewQuantity()))
-                .findAny()
-                .orElseThrow(() -> new NoProductsInShoppingCartException("Пользователь " + username + " не имеет корзину покупок."));
+        if (shoppingCart == null || shoppingCart.getProducts() == null
+                || !shoppingCart.getProducts().containsKey(requestDto.getProductId())) {
+            throw new NoProductsInShoppingCartException("Пользователь " + username + " не имеет корзину покупок.");
+        }
+        shoppingCart.getProducts().put(requestDto.getProductId(), requestDto.getNewQuantity());
         shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
